@@ -1,0 +1,27 @@
+[package]
+name = "svyaz"
+version = "0.1.0-dev.1"
+edition = "2021"
+authors = ["Lumen Pink <hi@lumen.pink>"]
+description = "Svyaz (sv) — Micro HTTP/HTTPS client in pure Rust (Gosplan Ministry of Communications)"
+license = "Apache-2.0"
+repository = "https://codeberg.org/lumenpink/svyaz"
+homepage = "https://svyaz.2lp.in"
+readme = "README.md"
+keywords = ["http", "https", "client", "curl", "minimalist", "cli"]
+categories = ["command-line-utilities", "web-programming::http-client"]
+
+[lib]
+name = "svyaz"
+path = "src/lib.rs"
+
+[[bin]]
+name = "svyaz"
+path = "src/bin/svyaz.rs"
+
+[[bin]]
+name = "sv"
+path = "src/bin/sv.rs"
+
+[dependencies]
+ureq = { version = "2.12", default-features = false, features = ["tls", "gzip"] }

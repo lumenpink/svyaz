@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Svyaz (sv) — Micro Cliente HTTP/HTTPS em Rust Puro</title>
+  <meta name="description" content="Micro-cliente HTTP/HTTPS em Rust puro com rustls embutido, zero OpenSSL dinâmico, subset compatível com curl e arquitetura Gosplan minimalista.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📡</text></svg>">
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --border: #30363d;
+      --text: #c9d1d9;
+      --text-muted: #8b949e;
+      --accent: #58a6ff;
+      --accent-hover: #79c0ff;
+      --gold: #d29922;
+      --red: #f85149;
+      --green: #3fb950;
+      --code-bg: #030407;
+      --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      line-height: 1.6;
+      padding: 0 1rem;
+    }
+    header {
+      max-width: 900px;
+      margin: 4rem auto 2rem;
+      text-align: center;
+    }
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border-radius: 9999px;
+      background: rgba(88, 166, 255, 0.15);
+      color: var(--accent);
+      border: 1px solid rgba(88, 166, 255, 0.3);
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: #f0f6fc;
+      margin-bottom: 1rem;
+    }
+    h1 span {
+      color: var(--gold);
+    }
+    .lead {
+      font-size: 1.25rem;
+      color: var(--text-muted);
+      max-width: 750px;
+      margin: 0 auto 2rem;
+    }
+    .actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 3rem;
+    }
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 1rem;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #0d1117;
+    }
+    .btn-primary:hover {
+      background: var(--accent-hover);
+    }
+    .btn-secondary {
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover {
+      border-color: var(--text-muted);
+    }
+    main {
+      max-width: 900px;
+      margin: 0 auto 5rem;
+    }
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+    }
+    .card h3 {
+      font-size: 1.15rem;
+      margin-bottom: 0.5rem;
+      color: #f0f6fc;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .card p {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+    }
+    section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+    h2 {
+      font-size: 1.75rem;
+      color: #f0f6fc;
+      margin-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.25rem;
+      overflow-x: auto;
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      color: #f0f6fc;
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+    }
+    code {
+      font-family: var(--font-mono);
+      background: rgba(110, 118, 129, 0.2);
+      padding: 0.15rem 0.35rem;
+      border-radius: 4px;
+      font-size: 0.85em;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      font-size: 0.95rem;
+    }
+    th, td {
+      padding: 0.75rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    th {
+      background: rgba(110, 118, 129, 0.1);
+      color: #f0f6fc;
+      font-weight: 600;
+    }
+    tr:hover {
+      background: rgba(110, 118, 129, 0.05);
+    }
+    footer {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      padding: 3rem 0;
+      border-top: 1px solid var(--border);
+      max-width: 900px;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="badge">📡 Ministério de Comunicações da URSS (Связь)</div>
+    <h1>Svyaz <span>(sv)</span></h1>
+    <p class="lead">Micro cliente HTTP/HTTPS em Rust puro com TLS embutido, binário estático e subset compatível com curl para ambientes minimalistas e automação.</p>
+    <div class="actions">
+      <a href="https://codeberg.org/lumenpink/svyaz" class="btn btn-primary">Repositório no Codeberg</a>
+      <a href="#exemplos" class="btn btn-secondary">Ver Exemplos de Uso</a>
+    </div>
+  </header>
+
+  <main>
+    <div class="card-grid">
+      <div class="card">
+        <h3>🔒 Rustls Nativo</h3>
+        <p>TLS 1.2 e 1.3 em Rust puro, sem acoplamento a bibliotecas OpenSSL ou C externas.</p>
+      </div>
+      <div class="card">
+        <h3>⚡ Drop-in curl Subset</h3>
+        <p>Aceita as flags fundamentais do curl (<code>-s</code>, <code>-f</code>, <code>-o</code>, <code>-m</code>, <code>-w</code>, <code>-fsSL</code>) diretamente.</p>
+      </div>
+      <div class="card">
+        <h3>📦 Estático & Ultraleve</h3>
+        <p>Binário único e independente (< 4MB) pronto para BusyBox, Alpine Linux e containers.</p>
+      </div>
+    </div>
+
+    <section id="instalacao">
+      <h2>📥 Instalação</h2>
+      <p>Clone e compile diretamente usando o gerenciador de pacotes do Rust (Cargo):</p>
+      <pre><code># Instalação rápida via Cargo
+git clone ssh://git@codeberg.org/lumenpink/svyaz.git
+cd svyaz
+cargo install --path .
+
+# Os binários 'svyaz' e 'sv' ficarão disponíveis no seu PATH</code></pre>
+    </section>
+
+    <section id="exemplos">
+      <h2>🚀 Exemplos de Uso</h2>
+      <p>O Svyaz pode ser executado tanto pelo nome completo quanto pelo atalho de duas letras <code>sv</code>:</p>
+      <pre><code># 1. Requisição GET simples
+sv https://api.github.com/zen
+
+# 2. Chamada silenciosa com timeout de 3 segundos
+sv -s -m 3 https://codeberg.org/api/v1/version
+
+# 3. Download de arquivo com redirecionamentos (idêntico a curl -fsSL)
+sv -fsSL https://example.com/archive.tar.gz -o /tmp/archive.tar.gz
+
+# 4. Requisição POST com JSON e Token
+sv -X POST \
+  -H "Authorization: token $CODEBERG_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"title":"Nova issue"}' \
+  "https://codeberg.org/api/v1/repos/lumenpink/svyaz/issues"
+
+# 5. Capturar apenas o status code HTTP (200, 404, etc.)
+sv -s -o /dev/null -w "%{http_code}\n" https://codeberg.org/api/v1/version</code></pre>
+    </section>
+
+    <section id="opcoes">
+      <h2>⚙️ Tabela de Opções</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Opção</th>
+            <th>Compatibilidade curl</th>
+            <th>Descrição</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>-X, --request</code></td>
+            <td>Sim</td>
+            <td>Especifica o método HTTP (<code>GET</code>, <code>POST</code>, <code>PUT</code>, <code>PATCH</code>, <code>HEAD</code>)</td>
+          </tr>
+          <tr>
+            <td><code>-H, --header</code></td>
+            <td>Sim</td>
+            <td>Passa cabeçalho HTTP customizado (ex: <code>-H "Authorization: token xxx"</code>)</td>
+          </tr>
+          <tr>
+            <td><code>-d, --data</code></td>
+            <td>Sim</td>
+            <td>Corpo da requisição POST/PUT/PATCH (string, <code>@arquivo</code> ou <code>-</code>)</td>
+          </tr>
+          <tr>
+            <td><code>-s, --silent</code></td>
+            <td>Sim</td>
+            <td>Modo silencioso (sem saída de progresso na stderr)</td>
+          </tr>
+          <tr>
+            <td><code>-f, --fail</code></td>
+            <td>Sim</td>
+            <td>Retorna exit code <code>22</code> em erros HTTP 4xx ou 5xx</td>
+          </tr>
+          <tr>
+            <td><code>-o, --output</code></td>
+            <td>Sim</td>
+            <td>Grava corpo da resposta em arquivo em vez do stdout</td>
+          </tr>
+          <tr>
+            <td><code>-m, --max-time</code></td>
+            <td>Sim</td>
+            <td>Tempo limite máximo da requisição em segundos</td>
+          </tr>
+          <tr>
+            <td><code>-w, --write-out</code></td>
+            <td>Sim</td>
+            <td>Formata saída final (suporta <code>%{http_code}</code>, <code>\n</code>, <code>\t</code>)</td>
+          </tr>
+          <tr>
+            <td><code>-I, --head</code></td>
+            <td>Sim</td>
+            <td>Executa requisição <code>HEAD</code></td>
+          </tr>
+          <tr>
+            <td><code>-L, --location</code></td>
+            <td>Sim</td>
+            <td>Segue redirecionamentos HTTP 3xx automaticamente</td>
+          </tr>
+          <tr>
+            <td><code>-fsSL</code></td>
+            <td>Sim</td>
+            <td>Combinação de flags padrão para downloads silenciosos e resilientes</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="integracao">
+      <h2>🛠️ Integração com o Ecossistema CCCP</h2>
+      <p>O Svyaz substitui o <code>curl</code> em ambientes sem binários externos nos seguintes módulos:</p>
+      <ul>
+        <li><strong><code>cccp diva</code></strong>: Triagem de tickets via Gemini e publicação nas forjas.</li>
+        <li><strong><code>cccp tickets sync</code></strong>: Sincronização e listagem de issues.</li>
+        <li><strong><code>cccp check-update</code></strong>: Verificação de versões remotas e download de patches.</li>
+        <li><strong><code>cccp catalog</code></strong>: Atualização de tópicos e descrição nas forjas remotas.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <p>★ Svyaz (sv) — Conectando os povos do ecossistema Gosplan ★</p>
+    <p>Distribuído sob a licença <a href="https://www.apache.org/licenses/LICENSE-2.0" style="color:var(--accent);">Apache 2.0</a>.</p>
+  </footer>
+
+</body>
+</html>
