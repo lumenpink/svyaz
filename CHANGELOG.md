@@ -9,5 +9,5 @@
 ### [nightly]
 
 ### Features
-  - initial project setup for svyaz micro http client
+  - (feat: initial project setup for svyaz micro http client (ref #1)) feat: initial project setup for svyaz micro http client (ref #1)
 
