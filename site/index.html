@@ -195,6 +195,39 @@
       margin: 0 auto;
     }
   </style>
+
+  <style>
+    .site-footer {
+      border-top: 1px solid var(--border, #333);
+      padding: 2rem 1rem;
+      margin-top: 3rem;
+      text-align: center;
+      font-size: 0.85rem;
+      line-height: 1.6;
+    }
+    .footer-canonical {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      align-items: center;
+      justify-content: center;
+    }
+    .footer-line-identity {
+      font-weight: 500;
+    }
+    .footer-line-metadata {
+      color: var(--text-muted, #888);
+      font-size: 0.8rem;
+    }
+    .site-footer a {
+      color: var(--accent, #ff79c6);
+      text-decoration: none;
+    }
+    .site-footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+
 </head>
 <body>
 
@@ -343,9 +376,15 @@ sv -s -o /dev/null -w "%{http_code}\n" https://codeberg.org/api/v1/version</code
     </section>
   </main>
 
-  <footer>
-    <p>★ Svyaz (sv) — Conectando os povos do ecossistema Gosplan ★</p>
-    <p>Distribuído sob a licença <a href="https://www.apache.org/licenses/LICENSE-2.0" style="color:var(--accent);">Apache 2.0</a>.</p>
+  <footer class="site-footer">
+    <div class="footer-canonical">
+      <div class="footer-line footer-line-identity">
+        Orgulhosamente produzido por uma <a href="https://travesti.2lp.in/pt/" target="_blank" rel="noopener">travesti latina</a> 🏳️‍⚧️ :)
+      </div>
+      <div class="footer-line footer-line-metadata">
+        svyaz v0.1.0-dev.9+20260927.3841aa4 • por <a href="https://lumen.pink" target="_blank" rel="noopener">Lumen Pink</a> • 2026-09-27T17:51:00Z • Brasil 🇧🇷 • <a href="LICENSE" target="_blank" rel="noopener">Apache-2.0</a>
+      </div>
+    </div>
   </footer>
 
 </body>
