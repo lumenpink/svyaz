@@ -230,7 +230,10 @@ fn parse_header_pair(raw: &str, headers: &mut Vec<(String, String)>) -> Result<(
         headers.push((k.trim().to_string(), v.trim().to_string()));
         Ok(())
     } else {
-        Err(format!("Invalid header format '{}', expected 'Name: Value'", raw))
+        Err(format!(
+            "Invalid header format '{}', expected 'Name: Value'",
+            raw
+        ))
     }
 }
 
@@ -258,7 +261,9 @@ pub fn print_help(bin_name: &str) {
     println!("  {} [options] <URL>\n", bin_name);
     println!("Options:");
     println!("  -X, --request <METHOD>   Specify request method (GET, POST, PUT, PATCH, HEAD)");
-    println!("  -H, --header <HEADER>    Pass custom header to server (e.g. 'Authorization: token xxx')");
+    println!(
+        "  -H, --header <HEADER>    Pass custom header to server (e.g. 'Authorization: token xxx')"
+    );
     println!("  -d, --data <DATA>        HTTP POST/PUT/PATCH data (use @file to load from file, - for stdin)");
     println!("  -s, --silent             Silent mode (do not output errors or progress)");
     println!("  -f, --fail               Fail silently (exit code 22) on HTTP 4xx/5xx errors");
@@ -271,9 +276,15 @@ pub fn print_help(bin_name: &str) {
     println!("  -h, --help               Display this help text\n");
     println!("Examples:");
     println!("  {} https://api.github.com/zen", bin_name);
-    println!("  {} -s -f -m 3 https://codeberg.org/api/v1/version", bin_name);
+    println!(
+        "  {} -s -f -m 3 https://codeberg.org/api/v1/version",
+        bin_name
+    );
     println!("  {} -X POST -H 'Content-Type: application/json' -d '{{\"hello\":\"world\"}}' https://httpbin.org/post", bin_name);
-    println!("  {} -s -o /dev/null -w '%{{http_code}}' -X PATCH https://api.example.com/item", bin_name);
+    println!(
+        "  {} -s -o /dev/null -w '%{{http_code}}' -X PATCH https://api.example.com/item",
+        bin_name
+    );
 }
 
 pub fn execute(config: Config) -> Result<i32, String> {
@@ -308,9 +319,7 @@ pub fn execute(config: Config) -> Result<i32, String> {
             let status = resp.status();
             (status, Some(resp.into_reader()))
         }
-        Err(ureq::Error::Status(status, resp)) => {
-            (status, Some(resp.into_reader()))
-        }
+        Err(ureq::Error::Status(status, resp)) => (status, Some(resp.into_reader())),
         Err(ureq::Error::Transport(err)) => {
             if !config.silent {
                 eprintln!("svyaz: transport error: {}", err);
@@ -431,10 +440,7 @@ mod tests {
                     cfg.headers[1],
                     ("Content-Type".to_string(), "application/json".to_string())
                 );
-                assert_eq!(
-                    cfg.data,
-                    Some(b"{\"title\":\"bug\"}".to_vec())
-                );
+                assert_eq!(cfg.data, Some(b"{\"title\":\"bug\"}".to_vec()));
             }
             _ => panic!("Expected Action::Run"),
         }
