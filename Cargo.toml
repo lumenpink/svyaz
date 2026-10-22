@@ -25,3 +25,10 @@ path = "src/bin/sv.rs"
 
 [dependencies]
 ureq = { version = "2.12", default-features = false, features = ["tls", "gzip"] }
+
+[profile.release]
+opt-level = "z"
+lto = "fat"
+codegen-units = 1
+panic = "abort"
+strip = true
