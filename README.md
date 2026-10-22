@@ -41,6 +41,14 @@ cp target/release/svyaz ~/.local/bin/svyaz
 
 ---
 
+## 4. Compilação Estática & Otimização de Tamanho
+
+O Svyaz adota as diretrizes de engenharia soberana da norma GOST 1.5.0:
+* **Linking Estático musl:** Compilação hermética com `-C target-feature=+crt-static`, gerando executáveis `static-pie` universais e imunes a falhas de carregador dinâmico.
+* **Otimização Extrema:** Perfil `release` com `opt-level = "z"`, `lto = "fat"`, `codegen-units = 1`, `panic = "abort"` e descarte de símbolos (`strip = true`).
+
+---
+
 ## 3. Uso & Exemplos
 
 ```bash
