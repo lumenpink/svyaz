@@ -2,7 +2,8 @@
 
 ## [Unreleased]
 
-- Routine maintenance, documentation updates, and operational improvements.
+### Changed
+  - (build) otimizar tamanho de binario com profile.release e habilitar linking estatico musl crt-static (closes #8)
 
 ## Previous Releases
 
