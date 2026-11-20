@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0.0",
+  "slug": "svyaz",
+  "title": "Svyaz",
+  "site_type": "app",
+  "tagline": "Micro cliente HTTP/HTTPS em Rust puro",
+  "summary": "Micro cliente HTTP/HTTPS minimalista para requisições rápidas e inspeção de rede.",
+  "abstract": "O Svyaz (sv) é um utilitário CLI e biblioteca HTTP/HTTPS em Rust puro concebido para substituir ferramentas pesadas com tempos de inicialização ultrarrápidos, suporte TLS nativo e footprint mínimo.",
+  "tags": [
+    "svyaz",
+    "http",
+    "https",
+    "client",
+    "curl",
+    "rust",
+    "cli"
+  ],
+  "icon": "📡",
+  "theme": {
+    "bg_color": "#11111b",
+    "accent_color": "#89b4fa"
+  }
+}
