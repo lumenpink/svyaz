@@ -1,6 +1,6 @@
 [package]
 name = "svyaz"
-version = "0.1.0-dev.33+20261120.ee8d2d8"
+version = "0.1.0-dev.34+20261120.737b854"
 edition = "2021"
 authors = ["Lumen Pink <hi@lumen.pink>"]
 description = "Svyaz (sv) — Micro HTTP/HTTPS client in pure Rust (Gosplan Ministry of Communications)"

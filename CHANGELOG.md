@@ -3,6 +3,9 @@
 ## [Unreleased]
 
 ### Changed
+- **ci:** delegar entregas ao Kombinat via Generic Packages (`cccp package upload`) (closes #12)
+
+### Changed
   - (ci) remover campo permissions incompativel com forgejo actions (closes #10)
   - (build) otimizar tamanho de binario com profile.release e habilitar linking estatico musl crt-static (closes #8)
 
